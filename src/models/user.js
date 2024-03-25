@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       required: true,
       unique: true,
+      validate: (email) => email.includes("@") && email.includes("."), //validate create yaparken otomatik verir bu yuzden update de olsun dıye yazdık.
     },
     password: {
       type: String,
