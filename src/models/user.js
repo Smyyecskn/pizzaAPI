@@ -27,24 +27,26 @@ const UserSchema = new mongoose.Schema(
       // ],
       // set: passwordEncrypt
       //? Yöntem-1:
-      // set: (password) => {
-      //     if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password)) {
-      //         return passwordEncrypt(password)
-      //     } else {
-      //         throw new Error('Password type is not correct.')
-      //     }
-      // },
-      //? Yöntem-2:
       set: (password) => {
         if (
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password)
         ) {
           return passwordEncrypt(password);
         } else {
-          return "wrong";
+          throw new Error("Password type is not correct.");
         }
       },
-      validate: (password) => password != "wrong",
+      //? Yöntem-2: validate setten sonra çalıştıgı için önce password validatee encrypt edilmiş halde geliyor validate bunu guncelleyemedı.Bu yuzden validetei set içinde yaparak hem şifreledik hemde regex kullandık.
+      // set: (password) => {
+      //   if (
+      //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password)
+      //   ) {
+      //     return passwordEncrypt(password);
+      //   } else {
+      //     return "wrong";
+      //   }
+      // },
+      // validate: (password) => password != "wrong",
     },
 
     email: {
