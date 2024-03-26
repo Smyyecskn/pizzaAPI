@@ -34,7 +34,7 @@ module.exports = {
   // CRUD:
 
   create: async (req, res) => {
-    /*
+        /*
             #swagger.tags = ["Users"]
             #swagger.summary = "Create User"
         */
@@ -48,7 +48,7 @@ module.exports = {
   },
 
   read: async (req, res) => {
-    /*
+        /*
             #swagger.tags = ["Users"]
             #swagger.summary = "Get Single User"
         */
@@ -62,7 +62,7 @@ module.exports = {
   },
 
   update: async (req, res) => {
-    /*
+        /*
             #swagger.tags = ["Users"]
             #swagger.summary = "Update User"
         */
