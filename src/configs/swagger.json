@@ -7,7 +7,7 @@
     "termsOfService": "http://www.clarusway.com/#",
     "contact": {
       "name": "",
-      "email": "qadir@clarusway.com"
+      "email": "smyye@gmail.com"
     },
     "license": {
       "name": "ISC"
@@ -15,10 +15,7 @@
   },
   "host": "127.0.0.1:8000",
   "basePath": "/",
-  "schemes": [
-    "http",
-    "https"
-  ],
+  "schemes": ["http", "https"],
   "securityDefinitions": {
     "Token": {
       "type": "apiKey",
@@ -33,12 +30,8 @@
       "description": "JWT Authentication * Example: <b>Bearer ...accessToken...</b>"
     }
   },
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "paths": {},
   "security": [
     {
