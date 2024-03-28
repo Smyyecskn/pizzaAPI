@@ -2,11 +2,12 @@
 /* -------------------------------------------------------
     NODEJS EXPRESS | CLARUSWAY FullStack Team
 ------------------------------------------------------- */
-//! Token modeli ve User modeli require ederek Bir TOKEN OLUŞTURDU. Sadece token vermek bu işlem için yeterli değil bunu kontrol etmemiz gerek. AUTHENTİCATİON MİDDLEWARE YAZICAZ.SİSTEMİN TÜMÜNÜ İNGİLENDİRMELİ ÇÜNKÜ(2.31)
 // Auth Controller:
+
 const User = require("../models/user");
 const Token = require("../models/token");
 const passwordEncrypt = require("../helpers/passwordEncrypt");
+const jwt = require("jsonwebtoken");
 
 module.exports = {
   login: async (req, res) => {
@@ -30,7 +31,6 @@ module.exports = {
       const user = await User.findOne({ $or: [{ username }, { email }] });
 
       if (user && user.password == passwordEncrypt(password)) {
-        //Usermodeldeki password veritabanındaki şifrelenmiş hali ile ==? kullanıcının gonderdıgı (pasword)u eşitleyıp bakmamız gerek.
         if (user.isActive) {
           /* SIMPLE TOKEN */
 
@@ -44,9 +44,49 @@ module.exports = {
 
           /* SIMPLE TOKEN */
 
+          /* JWT */
+
+          const accessInfo = { // kısa omurlu krıtık data
+            key: process.env.ACCESS_KEY,
+            time: "30m",
+            data: {
+              id: user.id,
+              username: user.username,
+              email: user.email,
+              password: user.password,
+              isActive: user.isActive,
+              isAdmin: user.isAdmin,
+            },
+          };
+
+          const refreshInfo = { //cok krıtık olmayan uzun omurlu olan datalar
+            key: process.env.REFRESH_KEY,
+            time: "3d",
+            data: {
+              id: user.id,
+              password: user.password, // encrypted password
+            },
+          };
+
+          // jwt.sign(access_data, access_key, { expiresIn: '30m' })
+          const accessToken = jwt.sign(accessInfo.data, accessInfo.key, {
+            expiresIn: accessInfo.time,
+          }); 
+
+          const refreshToken = jwt.sign(refreshInfo.data, refreshInfo.key, {
+           
+            expiresIn: refreshInfo.time,
+          });
+
+          /* JWT */
+
           res.status(200).send({
             error: false,
             token: tokenData.token,
+            bearer: {
+              access: accessToken,
+              refresh: refreshToken,
+            },
             user,
           });
         } else {
@@ -63,13 +103,62 @@ module.exports = {
     }
   },
 
+  refresh: async (req, res) => {
+    /*
+            #swagger.tags = ["Authentication"]
+            #swagger.summary = "JWT: Refresh"
+            #swagger.description = 'Refresh token.'
+        */
+
+    const refreshToken = req.body?.bearer?.refresh;
+
+    if (refreshToken) {
+      const refreshData = await jwt.verify(
+        refreshToken,
+        process.env.REFRESH_KEY
+      );
+      // console.log(refreshData)
+
+      if (refreshData) {
+        const user = await User.findOne({ _id: refreshData.id });
+
+        if (user && user.password == refreshData.password) {
+          res.status(200).send({
+            error: false,
+            bearer: {
+              access: jwt.sign(user.toJSON(), process.env.ACCESS_KEY, {
+                expiresIn: "30m",
+              }),
+            },
+          });
+        } else {
+          res.errorStatusCode = 401;
+          throw new Error("Wrong id or password.");
+        }
+      } else {
+        res.errorStatusCode = 401;
+        throw new Error("JWT refresh data is wrong.");
+      }
+    } else {
+      res.errorStatusCode = 401;
+      throw new Error("Please enter bearer.refresh");
+    }
+  },
+
   logout: async (req, res) => {
-    const auth = req.headers?.authorization; // Token ...Tokenkey
-    const tokenKey = auth ? auth.split(" ") : null; //["Token" ""...Tokenkey"]
-    const result = await Token.findOne({ token: tokenKey[1] });
-    res.status(200).send({
+    /*
+            #swagger.tags = ["Authentication"]
+            #swagger.summary = "simpleToken: Logout"
+            #swagger.description = 'Delete token key.'
+        */
+
+    const auth = req.headers?.authorization; // Token ...tokenKey...
+    const tokenKey = auth ? auth.split(" ") : null; // ['Token', '...tokenKey...']
+    const result = await Token.deleteOne({ token: tokenKey[1] });
+
+    res.send({
       error: false,
-      message: "Token DELETED. Logout was OK.",
+      message: "Token deleted. Logout was OK.",
       result,
     });
   },

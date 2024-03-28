@@ -22,11 +22,19 @@ module.exports = {
             `
         */
 
-    const data = await res.getModelList(Order, {}, ["userId", "pizzaId"]); // populateı [] olarak da alabiliriz.
+    let filter = {};
+    if (!req.user.isAdmin) {
+      customFilter = { userId: req.user.id };
+    }
+
+    const data = await res.getModelList(Order, customFilter, [
+      "userId",
+      "pizzaId",
+    ]); // populateı [] olarak da alabiliriz.
 
     res.status(200).send({
       error: false,
-      details: await res.getModelListDetails(Order),
+      details: await res.getModelListDetails(Order, customFilter),
       data,
     });
   },

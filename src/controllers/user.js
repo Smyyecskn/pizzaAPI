@@ -53,8 +53,12 @@ module.exports = {
             #swagger.tags = ["Users"]
             #swagger.summary = "Get Single User"
         */
+    let filter = {};
+    if (!req.user.isAdmin) {
+      filter = { _id: req.user._id };
+    }
 
-    const data = await User.findOne({ _id: req.params.id });
+    const data = await User.findOne({ _id: req.params.id, ...filter });
 
     res.status(200).send({
       error: false,
@@ -68,9 +72,18 @@ module.exports = {
             #swagger.summary = "Update User"
         */
 
-    const data = await User.updateOne({ _id: req.params.id }, req.body, {
-      runValidators: true,
-    });
+    let filter = {};
+    if (!req.user.isAdmin) {
+      filter = { _id: req.user._id };
+    }
+
+    const data = await User.updateOne(
+      { _id: req.params.id, ...filter },
+      req.body,
+      {
+        runValidators: true,
+      }
+    );
 
     res.status(202).send({
       error: false,
