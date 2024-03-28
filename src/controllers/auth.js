@@ -45,7 +45,7 @@ module.exports = {
           /* SIMPLE TOKEN */
 
           /* JWT */
-
+            //2 token oluşturacam token datalarını hazırlıyoruz.
           const accessInfo = { // kısa omurlu krıtık data
             key: process.env.ACCESS_KEY,
             time: "30m",
@@ -68,21 +68,18 @@ module.exports = {
             },
           };
 
-          // jwt.sign(access_data, access_key, { expiresIn: '30m' })
-          const accessToken = jwt.sign(accessInfo.data, accessInfo.key, {
-            expiresIn: accessInfo.time,
-          }); 
-
-          const refreshToken = jwt.sign(refreshInfo.data, refreshInfo.key, {
+   // jwt.sign(access_data, access_key, { expiresIn: '30m' }) //ŞİFRELEME İŞLEMİ TOKEN OLUŞTURMA. 
+            const accessToken = jwt.sign(accessInfo.data, accessInfo.key, { expiresIn: accessInfo.time}); 
+  //REFRESH YANI UZUN SURELI TOKEN OLUŞTUR.
+            const refreshToken = jwt.sign(refreshInfo.data, refreshInfo.key, { expiresIn: refreshInfo.time });
            
-            expiresIn: refreshInfo.time,
-          });
+       
 
           /* JWT */
 
           res.status(200).send({
             error: false,
-            token: tokenData.token,
+            token: tokenData.token, //response olarak 3unu de donmus oluyorum token,access,refresh
             bearer: {
               access: accessToken,
               refresh: refreshToken,
