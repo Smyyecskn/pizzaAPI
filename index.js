@@ -57,17 +57,69 @@ const nodemailer = require("nodemailer");
 //   pop3: { host: 'pop3.ethereal.email', port: 995, secure: true },
 //   web: 'https://ethereal.email'
 // }
+//Connect to MailServer ,mail serverena bağlı bir obje
+// const transporter = nodemailer.createTransport({
+//   //SMPT :mail göndericem
+//   host: "smtp.ethereal.email",
+//   port: 587,
+//   secure: false, //ssl,tls
+//   auth: {
+//     user: "akdpcfcxicxp52ka@ethereal.email",
+//     pass: "DuREmR3W4ht28TcFHe",
+//   },
+// });
 
+//mail göndericekse sendMail metodunu kullanıyorum.
+// transporter.sendMail(
+//   {
+//     from: "akdpcfcxicxp52ka@ethereal.email", //kimden
+//     to: "smyyeoztrk43@gmail.com", // kime //aa@a.com, aaa@a.com
+//     subject: "Hello",
+//     text: "Hello from ben ...",
+//     html: "Hello from ben <p>How are you</p>",
+//   },
+//   (error, success) => {
+//     success ? console.log("SUCCESSS" + success) : console.log("ERROR", error);
+//   }
+// );
+
+/* ------------------------------------------------------- */
+
+//*Google mail
+// //* Google -> AccountHome -> Security -> Two-Step-Verify -> App-Passwords
 const transporter = nodemailer.createTransport({
-  //SMPT :mail göndericem
-  host: "smtp.ethereal.email",
-  port: 587,
-  secure: false, //ssl,tls
+  service: "gmail",
   auth: {
-    user: "akdpcfcxicxp52ka@ethereal.email",
-    pass: 'DuREmR3W4ht28TcFHe',
+    user: "smyyeoztrk43@gmail.com",
+    pass: "yqiyrbiwiodoxqzx",
   },
 });
+
+//?YandexMail 
+// const transporter = nodemailer.createTransport({
+//     service: 'Yandex',
+//     auth: {
+//         user: 'username@yandex.com',
+//         pass: 'password' // your emailPassword
+//     }
+// })
+
+transporter.sendMail(
+  {
+    from: "smyyeoztrk43@gmail.com",
+    to: "omercoskun4343@gmail.com",
+    subject: "hello",
+    text: "selam ",
+    html: "<h1>Aşkım naberr</h1>",
+  },
+  (error, success) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(success);
+    }
+  }
+);
 
 /* ------------------------------------------------------- */
 // Routes:
