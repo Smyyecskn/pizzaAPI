@@ -5,7 +5,8 @@
 // Order Controller:
 
 const Order = require("../models/order");
-const pizza = require("./pizza")
+const Pizza = require("../models/pizza");
+const sendMail = require("../helpers/sendMail");
 
 module.exports = {
   list: async (req, res) => {
@@ -23,15 +24,23 @@ module.exports = {
             `
         */
 
+    // Manage only self-record.
     let customFilter = {};
     if (!req.user.isAdmin) {
       customFilter = { userId: req.user.id };
     }
 
-    const data = await res.getModelList(Order,   [
+    // const data = await res.getModelList(Order, customFilter, ['userId', 'pizzaId'])
+    const data = await res.getModelList(Order, customFilter, [
+      // populateı [] olarak da alabiliriz.
+
       "userId",
-      "pizzaId",
-    ]); // populateı [] olarak da alabiliriz.
+      {
+        path: "pizzaId",
+        select: "-__v",
+        populate: { path: "toppingIds", select: "name" },
+      }, // 'pizzaId'
+    ]);
 
     res.status(200).send({
       error: false,
@@ -48,7 +57,23 @@ module.exports = {
             #swagger.summary = "Create Order"
         */
 
+    // get price from the pizza:
+    if (!req.body?.price) {
+      const pizzaData = await Pizza.findOne({ _id: req.body.pizzaId });
+      req.body.price = pizzaData.price;
+    }
+
     const data = await Order.create(req.body);
+
+    /* SendMail */
+    sendMail(
+      data.email, // to
+      "Siparişiniz alındı.", // subject
+      // Message
+      `
+                <p>Siparişiniz alındı.</p>
+            `
+    );
 
     res.status(201).send({
       error: false,
@@ -61,15 +86,18 @@ module.exports = {
             #swagger.tags = ["Orders"]
             #swagger.summary = "Get Single Order"
         */
-          let customFilter = {};
-          if (!req.user.isAdmin) {
-            customFilter = { userId: req.user.id };
-          }
 
-    const data = await Order.findOne({ //bir başka kullanıcının siparişlerini görmesin diye.
+    // Manage only self-record.
+    let customFilter = {};
+    if (!req.user.isAdmin) {
+      customFilter = { userId: req.user.id };
+    }
+
+    const data = await Order.findOne({
+      //bir başka kullanıcının siparişlerini görmesin diye.
       _id: req.params.id,
       ...customFilter,
-    }).populate("pizzaId");
+    }).populate(["userId", "pizzaId"]);
 
     res.status(200).send({
       error: false,

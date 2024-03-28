@@ -5,6 +5,7 @@
 // User Controller:
 
 const User = require("../models/user");
+const sendMail = require("../helpers/sendMail");
 
 module.exports = {
   list: async (req, res) => {
@@ -20,8 +21,7 @@ module.exports = {
                     <li>URL/?<b>page=2&limit=1</b></li>
                 </ul>
             `
-        
-      */
+        */
 
     const data = await res.getModelList(User);
 
@@ -42,6 +42,17 @@ module.exports = {
 
     const data = await User.create(req.body);
 
+    /* SendMail */
+    sendMail(
+      data.email, // to
+      "Welcome", // subject
+      // Message
+      `
+                <h1>Welcome ${data.username}</h1>
+                <p>Welcome to our system</p>
+            `
+    );
+
     res.status(201).send({
       error: false,
       data,
@@ -53,13 +64,16 @@ module.exports = {
             #swagger.tags = ["Users"]
             #swagger.summary = "Get Single User"
         */
+
+    // Manage only self-record.
     let filter = {};
     if (!req.user.isAdmin) {
+      // const data = await User.findOne({ _id: req.params.id, _id: req.user._id })
       filter = { _id: req.user._id };
     }
 
     const data = await User.findOne({ _id: req.params.id, ...filter });
-    // const data = await User.findOne({ _id: req.params.id, filter = { _id: req.user._id };});
+    // const data = await User.findOne({ _id: req.params.id, _id: req.user._id });
 
     res.status(200).send({
       error: false,
@@ -73,6 +87,7 @@ module.exports = {
             #swagger.summary = "Update User"
         */
 
+    // Manage only self-record.
     let filter = {};
     if (!req.user.isAdmin) {
       filter = { _id: req.user._id };
@@ -81,9 +96,7 @@ module.exports = {
     const data = await User.updateOne(
       { _id: req.params.id, ...filter },
       req.body,
-      {
-        runValidators: true,
-      }
+      { runValidators: true }
     );
 
     res.status(202).send({
