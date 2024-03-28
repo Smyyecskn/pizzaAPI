@@ -8,7 +8,7 @@
     $ npm i express dotenv mongoose express-async-errors
     $ npm i morgan swagger-autogen swagger-ui-express redoc-express
     $ mkdir logs
-    $ nodemon
+    $ npm i nodemailer multer //email gönderme 
 */
 const express = require("express");
 const app = express();
@@ -44,6 +44,30 @@ app.use(require("./src/middlewares/authentication"));
 
 // findSearchSortPage / res.getModelList:
 app.use(require("./src/middlewares/queryHandler"));
+
+/* ------------------------------------------------------- */
+//*EMAIL
+const nodemailer = require("nodemailer");
+// nodemailer.createTestAccount().then((data) => console.log(data));
+// {
+//   user: 'akdpcfcxicxp52ka@ethereal.email',
+//   pass: 'DuREmR3W4ht28TcFHe',
+//   smtp: { host: 'smtp.ethereal.email', port: 587, secure: false },
+//   imap: { host: 'imap.ethereal.email', port: 993, secure: true },
+//   pop3: { host: 'pop3.ethereal.email', port: 995, secure: true },
+//   web: 'https://ethereal.email'
+// }
+
+const transporter = nodemailer.createTransport({
+  //SMPT :mail göndericem
+  host: "smtp.ethereal.email",
+  port: 587,
+  secure: false, //ssl,tls
+  auth: {
+    user: "akdpcfcxicxp52ka@ethereal.email",
+    pass: 'DuREmR3W4ht28TcFHe',
+  },
+});
 
 /* ------------------------------------------------------- */
 // Routes:

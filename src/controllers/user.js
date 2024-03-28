@@ -59,6 +59,7 @@ module.exports = {
     }
 
     const data = await User.findOne({ _id: req.params.id, ...filter });
+    // const data = await User.findOne({ _id: req.params.id, filter = { _id: req.user._id };});
 
     res.status(200).send({
       error: false,

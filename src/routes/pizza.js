@@ -5,13 +5,13 @@
 const router = require("express").Router();
 /* ------------------------------------------------------- */
 const pizza = require("../controllers/pizza");
-const { isAdmin } = require("../middlewares/permissions");
+const { isLogin, isAdmin } = require("../middlewares/permissions");
 
 //URL:/pizzas
-router.route("/").get(pizza.list).post(isAdmin, pizza.create);
+router.route("/").get(isLogin, pizza.list).post(isLogin, pizza.create);
 router
   .route("/:id")
-  .get(pizza.read)
+  .get(isLogin, pizza.read)
   .put(isAdmin, pizza.update)
   .patch(isAdmin, pizza.update)
   .delete(isAdmin, pizza.delete);

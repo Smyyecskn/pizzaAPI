@@ -45,12 +45,13 @@ module.exports = {
           /* SIMPLE TOKEN */
 
           /* JWT */
-            //2 token oluşturacam token datalarını hazırlıyoruz.
-          const accessInfo = { // kısa omurlu krıtık data
+          //2 token oluşturacam token datalarını hazırlıyoruz.
+          const accessInfo = {
+            // kısa omurlu krıtık data
             key: process.env.ACCESS_KEY,
             time: "30m",
             data: {
-              id: user.id,
+              _id: user.id,
               username: user.username,
               email: user.email,
               password: user.password,
@@ -59,7 +60,8 @@ module.exports = {
             },
           };
 
-          const refreshInfo = { //cok krıtık olmayan uzun omurlu olan datalar
+          const refreshInfo = {
+            //cok krıtık olmayan uzun omurlu olan datalar
             key: process.env.REFRESH_KEY,
             time: "3d",
             data: {
@@ -68,12 +70,14 @@ module.exports = {
             },
           };
 
-   // jwt.sign(access_data, access_key, { expiresIn: '30m' }) //ŞİFRELEME İŞLEMİ TOKEN OLUŞTURMA. 
-            const accessToken = jwt.sign(accessInfo.data, accessInfo.key, { expiresIn: accessInfo.time}); 
-  //REFRESH YANI UZUN SURELI TOKEN OLUŞTUR.
-            const refreshToken = jwt.sign(refreshInfo.data, refreshInfo.key, { expiresIn: refreshInfo.time });
-           
-       
+          // jwt.sign(access_data, access_key, { expiresIn: '30m' }) //ŞİFRELEME İŞLEMİ TOKEN OLUŞTURMA.
+          const accessToken = jwt.sign(accessInfo.data, accessInfo.key, {
+            expiresIn: accessInfo.time,
+          });
+          //REFRESH YANI UZUN SURELI TOKEN OLUŞTUR.
+          const refreshToken = jwt.sign(refreshInfo.data, refreshInfo.key, {
+            expiresIn: refreshInfo.time,
+          });
 
           /* JWT */
 
@@ -118,12 +122,14 @@ module.exports = {
 
       if (refreshData) {
         const user = await User.findOne({ _id: refreshData.id });
+        console.log(user, typeof user); //bak bakalım tıpıne
 
         if (user && user.password == refreshData.password) {
           res.status(200).send({
             error: false,
             bearer: {
               access: jwt.sign(user.toJSON(), process.env.ACCESS_KEY, {
+                //mongoose bızden json objesı bekler o yuzden JSONLASTIRDIK.
                 expiresIn: "30m",
               }),
             },
@@ -153,10 +159,18 @@ module.exports = {
     const tokenKey = auth ? auth.split(" ") : null; // ['Token', '...tokenKey...']
     const result = await Token.deleteOne({ token: tokenKey[1] });
 
-    res.send({
-      error: false,
-      message: "Token deleted. Logout was OK.",
-      result,
-    });
+    if (tokenKey[0] == "Token") {
+      const result = await Token.deleteOne({ token: tokenKey[1] });
+      res.send({
+        error: false,
+        message: "Token deleted. Logout was OK.",
+        result,
+      });
+    } else {
+      res.send({
+        error: false,
+        message: "JWT: No need any process for logout.",
+      });
+    }
   },
 };

@@ -5,6 +5,7 @@
 // Order Controller:
 
 const Order = require("../models/order");
+const pizza = require("./pizza")
 
 module.exports = {
   list: async (req, res) => {
@@ -22,12 +23,12 @@ module.exports = {
             `
         */
 
-    let filter = {};
+    let customFilter = {};
     if (!req.user.isAdmin) {
       customFilter = { userId: req.user.id };
     }
 
-    const data = await res.getModelList(Order, customFilter, [
+    const data = await res.getModelList(Order,   [
       "userId",
       "pizzaId",
     ]); // populateı [] olarak da alabiliriz.
@@ -60,10 +61,15 @@ module.exports = {
             #swagger.tags = ["Orders"]
             #swagger.summary = "Get Single Order"
         */
+          let customFilter = {};
+          if (!req.user.isAdmin) {
+            customFilter = { userId: req.user.id };
+          }
 
-    const data = await Order.findOne({ _id: req.params.id }).populate(
-      "pizzaId"
-    );
+    const data = await Order.findOne({ //bir başka kullanıcının siparişlerini görmesin diye.
+      _id: req.params.id,
+      ...customFilter,
+    }).populate("pizzaId");
 
     res.status(200).send({
       error: false,
