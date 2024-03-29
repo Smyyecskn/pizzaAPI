@@ -5,7 +5,7 @@
 
 module.exports = {
   isLogin: (req, res, next) => {
-    return next; // permissionları iptal etmek
+    // return next; // permissionları iptal etmek
     if (req.user && req.user.isActive) {
       next();
     } else {
@@ -15,7 +15,7 @@ module.exports = {
   },
 
   isAdmin: (req, res, next) => {
-    return next; // permissionları iptal etmek
+    // return next; // permissionları iptal etmek
     if (req.user && req.user.isActive && req.user.isAdmin) {
       next();
     } else {

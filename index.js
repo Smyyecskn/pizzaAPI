@@ -37,6 +37,7 @@ dbConnection();
 
 // Accept JSON:
 app.use(express.json());
+
 //Accept to Form-Encoded
 app.use(express.urlencoded({ extended: true }));
 
