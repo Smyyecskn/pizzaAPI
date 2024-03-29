@@ -23,7 +23,7 @@ const { isAdmin } = require("../middlewares/permissions");
 // });
 
 const upload = require("../middlewares/upload");
-
+//dosya bana array ve any istersem req.files içinde single istersem req.file olarak gelir.
 /* ------------------------------------------------------- */
 //URL:/pizzas
 router

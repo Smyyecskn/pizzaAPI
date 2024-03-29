@@ -13,8 +13,8 @@ const PizzaSchema = new mongoose.Schema(
       required: true,
       unique: true, //aynı pizza isminden bir tane daha olmasın.
     },
-    image: {
-      type: String,
+    images: {
+      type: [],
       trim: true,
     },
     price: {
@@ -22,7 +22,8 @@ const PizzaSchema = new mongoose.Schema(
       required: true,
     },
     toppingIds: [
-      {  //Farklı pizzalarda farklı malzeme(topping) OLMALI.
+      {
+        //Farklı pizzalarda farklı malzeme(topping) OLMALI.
         //pizza tablosundaki birden fazla veri topping tablosundaki birden fazla veriyle eşleşebilir.many to many
         type: mongoose.Schema.Types.ObjectId,
         ref: "Topping", //
