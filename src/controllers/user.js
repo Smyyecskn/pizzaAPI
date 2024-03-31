@@ -10,18 +10,18 @@ const sendMail = require("../helpers/sendMail");
 module.exports = {
   list: async (req, res) => {
     /*
-            #swagger.tags = ["Users"]
-            #swagger.summary = "List Users"
-            #swagger.description = `
-                You can send query with endpoint for filter[], search[], sort[], page and limit.
-                <ul> Examples:
-                    <li>URL/?<b>filter[field1]=value1&filter[field2]=value2</b></li>
-                    <li>URL/?<b>search[field1]=value1&search[field2]=value2</b></li>
-                    <li>URL/?<b>sort[field1]=1&sort[field2]=-1</b></li>
-                    <li>URL/?<b>page=2&limit=1</b></li>
-                </ul>
-            `
-        */
+      #swagger.tags = ["Users"]
+      #swagger.summary = "List Users"
+      #swagger.description = `
+      You can send query with endpoint for filter[], search[], sort[], page and limit.
+      <ul> Examples:
+      <li>URL/?<b>filter[field1]=value1&filter[field2]=value2</b></li>
+      <li>URL/?<b>search[field1]=value1&search[field2]=value2</b></li>
+      <li>URL/?<b>sort[field1]=1&sort[field2]=-1</b></li>
+      <li>URL/?<b>page=2&limit=1</b></li>
+      </ul>
+      `
+    */
 
     const data = await res.getModelList(User);
 
@@ -36,9 +36,9 @@ module.exports = {
 
   create: async (req, res) => {
     /*
-            #swagger.tags = ["Users"]
-            #swagger.summary = "Create User"
-        */
+     #swagger.tags = ["Users"]
+     #swagger.summary = "Create User"
+    */
 
     const data = await User.create(req.body);
 
@@ -61,9 +61,9 @@ module.exports = {
 
   read: async (req, res) => {
     /*
-            #swagger.tags = ["Users"]
-            #swagger.summary = "Get Single User"
-        */
+      #swagger.tags = ["Users"]
+      #swagger.summary = "Get Single User"
+    */
 
     // Manage only self-record.
     let filter = {};
@@ -83,9 +83,9 @@ module.exports = {
 
   update: async (req, res) => {
     /*
-            #swagger.tags = ["Users"]
-            #swagger.summary = "Update User"
-        */
+      #swagger.tags = ["Users"]
+      #swagger.summary = "Update User"
+    */
 
     // Manage only self-record.
     let filter = {};
@@ -108,9 +108,9 @@ module.exports = {
 
   delete: async (req, res) => {
     /*
-            #swagger.tags = ["Users"]
-            #swagger.summary = "Delete User"
-        */
+      #swagger.tags = ["Users"]
+      #swagger.summary = "Delete User"
+    */
 
     const data = await User.deleteOne({ _id: req.params.id });
 

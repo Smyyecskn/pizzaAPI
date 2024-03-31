@@ -36,7 +36,7 @@ const UserSchema = new mongoose.Schema(
           throw new Error("Password type is not correct.");
         }
       },
-      //? Yöntem-2: validate setten sonra çalıştıgı için önce password validatee encrypt edilmiş halde geliyor validate bunu guncelleyemedı.Bu yuzden validetei set içinde yaparak hem şifreledik hemde regex kullandık.
+      //? Yöntem-2: set metodu validateden önce çalıştı ve bana 64 karakterli bir şifre verdi Bu da validateden GEÇMEDİ.Bu yuzden validetei set içinde yaparak hem şifreledik hemde regex kullandık.
       // set: (password) => {
       //   if (
       //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password)
