@@ -1,4 +1,5 @@
 // "use strict";
+//! Burada bir function oluştrduk. Artık user contollerda ,order contollerda (uye olunca sipariş olusturunca )kullanıcıya MAİL gönderebiliriz. AMA o sayfada da REqUiRE ETMELİYİZ.
 
 // const nodemailer = require("nodemailer");
 
@@ -37,7 +38,7 @@
 //     service: "gmail",
 //     auth: {
 //       user: "smyyeoztrk43@gmail.com",
-//       pass: "yqiyrbiwiodoxqzx",
+//       pass: "tjwb ctdy jydp dflz",
 //     },
 //   });
 
@@ -93,7 +94,7 @@ module.exports = function (to, subject, message) {
   // SendMail:
   // transporter.sendMail({
   //     from: 'sfystdx7sif4vdr3@ethereal.email',
-  //     to: 'qadir@clarusway.com', // 'a@b.com, c@d.com'
+  //     to: 'smyyeoztrk43@gmail.com', // 'a@b.com, c@d.com'
   //     subject: 'Hello',
   //     text: 'Hello There. How are you?',
   //     html: '<b>Hello There.</b> <p>How are you?</p>',
@@ -101,13 +102,13 @@ module.exports = function (to, subject, message) {
   //     success ? console.log('SUCCESS', success) : console.log('ERROR', error)
   // })
 
-  //* GoogleMail (gmail)
+  //! GMAİLE BAĞLANMA GoogleMail (gmail)
   //* Google -> AccountHome -> Security -> Two-Step-Verify -> App-Passwords
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "qadiradamson@gmail.com",
-      pass: "glco ruhh szks rcsb",
+      user: "smyyeoztrk43@gmail.com",
+      pass: "tjwb ctdy jydp dflz",
     },
   });
 
@@ -120,10 +121,11 @@ module.exports = function (to, subject, message) {
   //     }
   // })
 
+  //! MAİL GÖNDERME
   transporter.sendMail(
     {
-      // from: 'qadiradamson@gmail.com',
-      to: to, // 'qadiradamson@gmail.com',
+      // from: 'smyyeoztrk43@gmail.com',
+      to: to, // 'omercoskun4369@gmail.com', //!3 parametreyı yukarıdakı fonksıyondan alıp buraya gönderdi.
       subject: subject, //  'Hello',
       text: message, // 'Hello There. How are you?',
       html: message, // '<b>Hello There.</b> <p>How are you?</p>',

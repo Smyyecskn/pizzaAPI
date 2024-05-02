@@ -65,7 +65,7 @@ module.exports = {
 
     const data = await Order.create(req.body);
 
-    /* SendMail */
+    /* SendMail */ //!Kullanıcıya mail gönderdik.
     sendMail(
       data.email, // to
       "Siparişiniz alındı.", // subject

@@ -6,7 +6,10 @@ const router = require("express").Router();
 /* ------------------------------------------------------- */
 const pizza = require("../controllers/pizza");
 const { isAdmin } = require("../middlewares/permissions");
-/* ------------------------------------------------------- */
+const upload = require("../middlewares/upload");
+/* -----------------------------------------------------
+
+ */
 //*UPLOAD
 //multer modulu ile "form-data" verileri kabul edebiliiriz.Yani dosya yükleme yapabiliriz.
 
@@ -22,7 +25,6 @@ const { isAdmin } = require("../middlewares/permissions");
 //   }),
 // });
 
-const upload = require("../middlewares/upload");
 //dosya bana array ve any istersem req.files içinde single istersem req.file olarak gelir.
 /* ------------------------------------------------------- */
 //URL:/pizzas

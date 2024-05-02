@@ -2,13 +2,13 @@
 /* -------------------------------------------------------
     NODEJS EXPRESS | CLARUSWAY FullStack Team
 ------------------------------------------------------- */
-//!BANA GELEN TOKENI YA A ACCESS_KEYI DOGRULAMA İŞLEMİ 
+//!BANA GELEN TOKENI YA DA ACCESS_KEYI DOGRULAMA İŞLEMİ
 const Token = require("../models/token");
 const jwt = require("jsonwebtoken");
 
 module.exports = async (req, res, next) => {
-  const auth = req.headers?.authorization; // Token ...Tokenkey
-  const tokenKey = auth ? auth.split(" ") : null; //["Token" ""...Tokenkey"]
+  const auth = req.headers?.authorization; // Token ...Tokenkey string
+  const tokenKey = auth ? auth.split(" ") : null; //["Token" ""...Tokenkey"] array
 
   if (tokenKey) {
     if (tokenKey[0] == "Token") {

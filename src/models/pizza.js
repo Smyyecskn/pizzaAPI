@@ -14,7 +14,7 @@ const PizzaSchema = new mongoose.Schema(
       unique: true, //aynı pizza isminden bir tane daha olmasın.
     },
     images: {
-      type: [],
+      type: String,
       trim: true,
     },
     price: {

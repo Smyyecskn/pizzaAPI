@@ -34,8 +34,8 @@ module.exports = {
         if (user.isActive) {
           /* SIMPLE TOKEN */
 
-          let tokenData = await Token.findOne({ userId: user.id });
-
+          let tokenData = await Token.findOne({ userId: user._id }); //token varsa
+          //1-token yoksa şifreli bir token oluşturduk.Token veriyor olmak yeterli değil. 2-Sistemin tümünü ilgilendiren bir middleware yazdık.
           if (!tokenData)
             tokenData = await Token.create({
               userId: user.id,
@@ -49,7 +49,7 @@ module.exports = {
           const accessInfo = {
             // kısa omurlu krıtık data
             key: process.env.ACCESS_KEY,
-            time: "30m",
+            time: process.env.ACCESS_EXP || "30m",
             data: {
               _id: user.id,
               username: user.username,
@@ -63,7 +63,7 @@ module.exports = {
           const refreshInfo = {
             //cok krıtık olmayan uzun omurlu olan datalar
             key: process.env.REFRESH_KEY,
-            time: "3d",
+            time: process.env.REFRESH_EXP || "3d",
             data: {
               id: user.id,
               password: user.password, // encrypted password
@@ -130,7 +130,7 @@ module.exports = {
             bearer: {
               access: jwt.sign(user.toJSON(), process.env.ACCESS_KEY, {
                 //mongoose bızden json objesı bekler o yuzden JSONLASTIRDIK.
-                expiresIn: "30m",
+                expiresIn: process.env.ACCESS_EXP,
               }),
             },
           });
@@ -158,11 +158,12 @@ module.exports = {
     const auth = req.headers?.authorization; // Token ...tokenKey...
     const tokenKey = auth ? auth.split(" ") : null; // ['Token', '...tokenKey...']
     const result = await Token.deleteOne({ token: tokenKey[1] });
+    //!(25/3 2.44)userın sılınıp sılınmedıgıne bakmak için thunderda /(anasayfaya) tokenımızla gidip POST atarsak bize user bilgisi verirse giriş yapılmış user bilgisi yoksa çıkış BAŞARILI. TOKEN DOGRUYSA sistemin heryerine ben USER DATASINI req.user ile GÖNDEREBİLDİM.(index 144).
+    //! ÇIKIŞ YAPTIGIMDA ise artık bana tekrar auth/login yaparsam YENİ BİR TOKEN OLUŞTURUR.
 
     if (tokenKey[0] == "Token") {
-      const result = await Token.deleteOne({ token: tokenKey[1] });
-      res.send({
-        error: false,
+      res.status(result.deletedCount > 0 ? 204 : 404).send({
+        error: result.deletedCount,
         message: "Token deleted. Logout was OK.",
         result,
       });

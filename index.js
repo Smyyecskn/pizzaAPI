@@ -38,7 +38,8 @@ dbConnection();
 // Accept JSON:
 app.use(express.json());
 
-//Accept to Form-Encoded
+//FE'ye dosya yükleme yapacaksak JSONla olmaz bunu form ile yaparız.
+//!Form-encodeddan html inputları(verileri) gondermek istediğimde FORM DATAYI KABUL ET .Accept to Form-Encoded
 app.use(express.urlencoded({ extended: true }));
 
 // Logger:
@@ -88,7 +89,7 @@ app.use(require("./src/middlewares/queryHandler"));
 // SendMail:
 // transporter.sendMail({
 //     from: 'sfystdx7sif4vdr3@ethereal.email',
-//     to: 'qadir@clarusway.com', // 'a@b.com, c@d.com'
+//     to: 'qadir@clarusway.com', // birden fazla mail için : 'a@b.com, c@d.com'
 //     subject: 'Hello',
 //     text: 'Hello There. How are you?',
 //     html: '<b>Hello There.</b> <p>How are you?</p>',
@@ -96,13 +97,13 @@ app.use(require("./src/middlewares/queryHandler"));
 //     success ? console.log('SUCCESS', success) : console.log('ERROR', error)
 // })
 
-// //* GoogleMail (gmail)
+//! GoogleMail (gmail) nodemailerdan mail hesabını oluşturmak
 // //* Google -> AccountHome -> Security -> Two-Step-Verify -> App-Passwords
 // const transporter = nodemailer.createTransport({
 //     service: 'gmail',
 //     auth: {
-//         user: 'qadiradamson@gmail.com',
-//         pass: 'glco ruhh szks rcsb'
+//         user: 'smyyeoztrk43@gmail.com',
+//         pass: 'tjwb ctdy jydp dflz'
 //     }
 // })
 
@@ -115,10 +116,11 @@ app.use(require("./src/middlewares/queryHandler"));
 //     }
 // })
 
+//! MAİL GÖNDERME 2 parametreli 1-ne göndereceğim 2- error/success
 // transporter.sendMail({
 
-//     // from: 'qadiradamson@gmail.com',
-//     to: 'qadiradamson@gmail.com',
+//     from: 'smyyeoztrk43@gmail.com',
+//     to: 'omercoskun4369@gmail.com',
 //     subject: 'Hello',
 //     text: 'Hello There. How are you?',
 //     html: '<b>Hello There.</b> <p>How are you?</p>',

@@ -20,7 +20,7 @@ module.exports = {
                     <li>URL/?<b>page=2&limit=1</b></li>
                 </ul>
             `
-        */
+    */
 
     const data = await res.getModelList(Pizza, {}, "toppingIds");
 
